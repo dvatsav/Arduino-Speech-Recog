@@ -24,13 +24,17 @@ void loop()
     if (c == '#'){break;}
     BluetoothData+=c;
   }  
+<<<<<<< HEAD
 
   /*
     if (BluetoothData == "*TV on") 
+=======
+    if (BluetoothData == "*turn me on") 
+>>>>>>> 3f4f41b0b1d430cf9fe155ca5c9b6faf356d35f2
     {
       digitalWrite(led1, 1);
     }
-    if (BluetoothData == "*TV off") 
+    if (BluetoothData == "*turn me off") 
     { 
       digitalWrite(led1, 0);      
     }*/
@@ -70,7 +74,10 @@ if(flag==1)
 
 lcd.setCursor(0,0);
 lcd.print(newdata);
-delay(2000);
+delay(5000);
 BluetoothData="";
 }
+
+
+
 
