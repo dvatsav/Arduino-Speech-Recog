@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1478207718 source:c:\users\yashi\documents\github\arduino-speech-recog\c code\testcode\main.cpp
+	<iostream>
+	<string.h>
+
