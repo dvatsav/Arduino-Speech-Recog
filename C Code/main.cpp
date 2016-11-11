@@ -1,81 +1,83 @@
 #include<iostream>
 #include<cstring>
 #include<cstdio>
+#include<sstream>
 
 using namespace std;
 
-
-string beforeop(string input)
-{ string output;
-
-   int i=0,k=0;
-   for (i=0;input[i]!='\0';i++)
-   {
-    //cout<<input[i]<<endl;
-        if(input[i]=='+' || input[i]=='-' || input[i]=='x'){
-        //cout<<"i value : "<<i<<"j value : "<<k<<"input[i] : "<<input[i]<<"output[k] : "<<output[k]<<"BREAKING"<<endl;
+int beforeop(char* input)
+{
+    int var=0;
+    char beginoutput[50];
+    int i=0,k=0,point;
+    for (i=0;input[i]!='\0';i++)
+    {
+        if(input[i]=='+' || input[i]=='-' || input[i]=='x')
+        {
+            point=i;
             break;
-            }
-        output[k]=input[i];
-        k+=1;
-        //cout<<"i value : "<<i<<"j value : "<<k<<"input[i] : "<<input[i]<<"output[k] : "<<output[k]<<endl;
-   }
-   /*while(input[i]!='+' || input[i]!='-' || input[i]!='x')
-   	{
-   		output[k++]=input[i];
-   		i+=1;
-   		if(i==input.lenlength())
-            break;
-   	}*/   //cout<<"END"<<endl;
-   //for (i=0;i<k;i++)
-    //    cout<<output[i];
-    //cout<<endl;
-   return output;
-}
-void afterop(char* input)
-{ char output[50];
-  int i,k,point;
-  char a;
-  //cout<<"input "<<strlen(input)<<endl;
-  cin>>a; 
-  for(i=0;input[i]!='\0';i++)
-    { if(input[i]=='+'|| input[i]=='x' || input[i]=='-')
-          {point=i;
-           break;
-          }
+        }
     }
-    cout<<"point="<<point<<endl;
-    for(i=point+1,k=0;input[i]!='\0';i++,k++)
-      { //cout<<"i="<<i<<endl;
-    //cout<<"k="<<k<<endl;
-cin>>a;
-        
-        output[k]=input[i];
-        //cout<<output[k];
-        cin>>a;
-
-      //cout<<output[k];
-      }
-      int lengthoutput=strlen(input)-1-point;
-      //cout<<lengthoutput<<endl;
-
-      //cout<<"input "<<strlen(input)<<endl;
-      //cout<<"output"<<strlen(output)<<endl;
-      for(i=0;i<lengthoutput;i++)
-        //cout<<output[i];
-      //cout<<endl;
-    //cout<<output;
-    //clrscr();
-   // cout<<outputt
+    for(i=0,k=0;i<point;i++,k++)
+    {
+        beginoutput[k]=input[i];
+    }
+    stringstream convert(beginoutput);
+    convert>>var;
+    return var;
 }
-int main()
-{   char potato[500]="6+7988",testvar[100];
-   afterop(potato);
-  //clrscr();
 
-	//for (int i=0;testvar[i]!='\0';i++)
-	{
-	//	cout<<testvar[i];
-	}
+int afterop(char* input)
+{
+    int var=0;
+    char endoutput[50];
+    int i,k,point;
+    for(i=0;input[i]!='\0';i++)
+    {
+        if(input[i]=='+'|| input[i]=='x' || input[i]=='-')
+        {
+            point=i;
+            break;
+        }
+    }
+    for(i=point+1,k=0;input[i]!='\0';i++,k++)
+    {
+        endoutput[k]=input[i];
+    }
+    stringstream convert(endoutput);
+    convert>>var;
+    return var;
+}
+
+int main()
+{
+    char inputstring[500]="6x12";
+    int firstnumber=0,secondnumber=0;
+    //to find the mathematical operator
+    for (int i=0;inputstring[i]!='\0';i++)
+    {
+        if(inputstring[i]=='+')
+        {
+            firstnumber=afterop(inputstring);
+            cout<<firstnumber<<endl;// if this line is commented, the answer changes to a wrong value. HOW
+            secondnumber=beforeop(inputstring);
+            //cout<<secondnumber<<endl;
+            cout<<"Sum is: "<<firstnumber+secondnumber<<endl;
+        }
+        else if(inputstring[i]=='x')
+        {
+            firstnumber=afterop(inputstring);
+            cout<<firstnumber<<endl;// if this line is commented, the answer changes to a wrong value. HOW
+            secondnumber=beforeop(inputstring);
+            cout<<"Product is: "<<firstnumber*secondnumber<<endl;
+        }
+        else if(inputstring[i]=='-')
+        {
+            firstnumber=afterop(inputstring);
+            cout<<firstnumber<<endl;// if this line is commented, the answer changes to a wrong value. HOW
+            secondnumber=beforeop(inputstring);
+            cout<<"Difference is: "<<secondnumber-firstnumber<<endl;
+        }
+    }
 	return 0;
 }
