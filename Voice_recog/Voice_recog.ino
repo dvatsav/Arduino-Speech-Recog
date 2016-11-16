@@ -22,12 +22,13 @@ void loop()
     char c = Genotronex.read();
     if (c == '#'){break;}
     BluetoothData+=c;
-  }  
-    if (BluetoothData == "*turn me on") 
+  } 
+   
+    if (BluetoothData == "*call") 
     {
       digitalWrite(led1, 1);
     }
-    if (BluetoothData == "*turn me off") 
+    if (BluetoothData == "*p***") 
     { 
       digitalWrite(led1, 0);      
     }

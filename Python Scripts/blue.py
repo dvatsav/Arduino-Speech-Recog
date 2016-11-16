@@ -1,6 +1,6 @@
 import bluetooth
 import subprocess
-target_name = "DECAY"
+target_name = "H-C-2010-06-01"
 target_address = None
 nearby_devices = bluetooth.discover_devices()
 #print(nearby_devices)
