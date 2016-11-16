@@ -5,7 +5,6 @@
 #include<cmath>
 
 using namespace std;
-
 int beforeop(char* input)
 {
     int var=0;
@@ -77,27 +76,38 @@ int afterop(char* input)
 
 int main()
 {
-    char inputstring[500]="12x30";
+    char inputstring[500]="*12 + 30";
+    char finalstring[500];
+    int k=0;
+
     int firstnumber=0,secondnumber=0;
-    //to find the mathematical operator
-    for (int i=0;inputstring[i]!='\0';i++)
+    for (int i=1;i<inputstring[i]!='\0';i++)
     {
-        if(inputstring[i]=='+')
+        if (inputstring[i]!=' ')
         {
-            firstnumber=afterop(inputstring);
-            secondnumber=beforeop(inputstring);
+            finalstring[k]=inputstring[i];
+            k++;
+        }
+    }
+    //to find the mathematical operator
+    for (int i=0;finalstring[i]!='\0';i++)
+    {
+        if(finalstring[i]=='+')
+        {
+            firstnumber=afterop(finalstring);
+            secondnumber=beforeop(finalstring);
             cout<<"Sum is: "<<firstnumber+secondnumber<<endl;
         }
-        else if(inputstring[i]=='x')
+        else if(finalstring[i]=='x')
         {
-            firstnumber=afterop(inputstring);
-            secondnumber=beforeop(inputstring);
+            firstnumber=afterop(finalstring);
+            secondnumber=beforeop(finalstring);
             cout<<"Product is: "<<firstnumber*secondnumber<<endl;
         }
-        else if(inputstring[i]=='-')
+        else if(finalstring[i]=='-')
         {
-            firstnumber=afterop(inputstring);
-            secondnumber=beforeop(inputstring);
+            firstnumber=afterop(finalstring);
+            secondnumber=beforeop(finalstring);
             cout<<"Difference is: "<<secondnumber-firstnumber<<endl;
         }
     }
