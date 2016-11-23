@@ -7,15 +7,15 @@
 rgb_lcd lcd;
 
 SoftwareSerial Genotronex(10, 11);
-int led1 = 13, firstnumber,secondnumber;
+int led1 = 13, firstnumber,secondnumber,sum,product,difference;
 String BluetoothData, inputstring,finalstring;
 
 
-int beforeop(char* input)
+int beforeop(String input)
 {
-    int var=0;
-    char beginoutput[50];
-    int i=0,k=0,point;
+    int beginoutputinteger=0;
+    String beginoutput;
+    int i,point;
     for (i=0;input[i]!='\0';i++)
     {
         if(input[i]=='+' || input[i]=='-' || input[i]=='x')
@@ -24,29 +24,19 @@ int beforeop(char* input)
             break;
         }
     }
-    for(i=0,k=0;i<point;i++,k++)
+    for(i=0;i<point;i++)
     {
-        beginoutput[k]=input[i];
+        beginoutput+=input[i];
     }
 
-    int endpos[500];
-    for(int y=0;y<k;y++)
-    {
-        endpos[y]=int(beginoutput[y])-48;
-    }
-
-    for(int y=k-1,x=0;y>=0;y--,x++)
-    {
-        var=var+(pow(10,x)*endpos[y]);
-    }
-
-    return var;
+    beginoutputinteger=beginoutput.toInt();
+    return beginoutputinteger;
 }
 
-int afterop(char* input)
+int afterop(String input)
 {
-    int var=0;
-    char endoutput[50];
+    int endoutputinteger;
+    String endoutput;
     int i,k,point;
 
     for(i=0;input[i]!='\0';i++)
@@ -57,27 +47,13 @@ int afterop(char* input)
             break;
         }
     }
-    for(i=point+1,k=0;input[i]!='\0';i++,k++)
+    for(i=point+1;input[i]!='\0';i++)
     {
-        endoutput[k]=input[i];
-
+        endoutput+=input[i];
     }
-    int endpos[500];
-    for(int y=0;y<k;y++)
-    {
-        endpos[y]=int(endoutput[y])-48;
-
-    }
-
-    for(int y=k-1,x=0;y>=0;y--,x++)
-    {
-        var=var+(pow(10,x)*endpos[y]);
-    }
-    return var;
+    endoutputinteger=endoutput.toInt();
+    return endoutputinteger;
 }
-
-
-
 
 void setup() {
   
@@ -97,61 +73,56 @@ void loop()
     if (c == '#'){break;}
     BluetoothData+=c;
   } 
-   
-   delay(100);
   inputstring="";
-for ( int i=1; BluetoothData[i]!='\0';i++)
-{
-   inputstring+=BluetoothData[i];
-}
-lcd.print(inputstring);
-
-    finalstring="";
-    for (int i=0;i<inputstring[i]!='\0';i++)
+  for ( int i=1; BluetoothData[i]!='\0';i++)
+  {
+    inputstring+=BluetoothData[i];
+  }
+  lcd.print(inputstring);
+  finalstring="";
+  for (int i=0;i<inputstring[i]!='\0';i++)
+  {
+    if (inputstring[i]!=' ')
     {
-        if (inputstring[i]!=' ')
-        {
-            finalstring+=inputstring[i];
-        }
+      finalstring+=inputstring[i];
     }
-    Serial.println(finalstring);
-    firstnumber=0;
-    secondnumber=0;
-    //to find the mathematical operator
-    for (int i=0;finalstring[i]!='\0';i++)
+  }
+  Serial.println(finalstring);
+  firstnumber=0;
+  secondnumber=0;
+  sum=0;
+  product=0;
+  difference=0;
+  for (int i=0;finalstring[i]!='\0';i++)
+  {
+    if(finalstring[i]=='+')
     {
-        if(finalstring[i]=='+')
-        {
-            Serial.println("addition operator found");
-            /*firstnumber=afterop(finalstring);
-            secondnumber=beforeop(finalstring);
-            int sum=firstnumber+secondnumber;
-            Serial.print("Sum is: ");
-            Serial.println(sum,DEC);*/
-        }
-        else if(finalstring[i]=='x')
-        {
-            Serial.println("multiplication operator found");
-            /*firstnumber=afterop(finalstring);
-            secondnumber=beforeop(finalstring);
-            int product=firstnumber*secondnumber;
-            Serial.print("Product is: ");
-            Serial.println(product,DEC);   */             
-        }
-        else if(finalstring[i]=='-')
-        {
-            Serial.println("subraction operator found");
-            /*firstnumber=afterop(finalstring);
-            secondnumber=beforeop(finalstring);            
-            int difference=firstnumber-secondnumber;
-            Serial.print("Difference is: ");
-            Serial.println(difference,DEC);*/
-        }
+      firstnumber=beforeop(finalstring);      
+      secondnumber=afterop(finalstring);
+      sum=firstnumber+secondnumber;
+      Serial.print("Sum is: ");
+      Serial.println(sum,DEC);
     }
-
-lcd.setCursor(0,0);
-delay(5000);
-BluetoothData="";
+    else if(finalstring[i]=='x')
+    {
+      firstnumber=beforeop(finalstring);
+      secondnumber=afterop(finalstring);
+      product=firstnumber*secondnumber;
+      Serial.print("Product is: ");
+      Serial.println(product,DEC);              
+    }
+    else if(finalstring[i]=='-')
+    {
+      firstnumber=beforeop(finalstring);
+      secondnumber=afterop(finalstring);            
+      difference=firstnumber-secondnumber;
+      Serial.print("Difference is: ");
+      Serial.println(difference,DEC);
+    }
+  }
+  lcd.setCursor(0,0);
+  delay(5000);
+  BluetoothData="";
 }
 
 
