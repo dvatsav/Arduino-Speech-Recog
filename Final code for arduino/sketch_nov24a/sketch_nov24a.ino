@@ -78,7 +78,6 @@ void loop()
   {
     inputstring+=BluetoothData[i];
   }
-  lcd.print(inputstring);
   finalstring="";
   for (int i=0;i<inputstring[i]!='\0';i++)
   {
@@ -87,7 +86,6 @@ void loop()
       finalstring+=inputstring[i];
     }
   }
-  Serial.println(finalstring);
   firstnumber=0;
   secondnumber=0;
   sum=0;
@@ -100,24 +98,21 @@ void loop()
       firstnumber=beforeop(finalstring);      
       secondnumber=afterop(finalstring);
       sum=firstnumber+secondnumber;
-      Serial.print("Sum is: ");
-      Serial.println(sum,DEC);
+      lcd.print(sum);
     }
     else if(finalstring[i]=='x')
     {
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);
       product=firstnumber*secondnumber;
-      Serial.print("Product is: ");
-      Serial.println(product,DEC);              
+      lcd.print(product);             
     }
     else if(finalstring[i]=='-')
     {
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);            
       difference=firstnumber-secondnumber;
-      Serial.print("Difference is: ");
-      Serial.println(difference,DEC);
+      lcd.print(difference);
     }
   }
   lcd.setCursor(0,0);

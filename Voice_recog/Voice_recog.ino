@@ -24,11 +24,11 @@ void loop()
     BluetoothData+=c;
   } 
    
-    if (BluetoothData == "*call") 
+    if (BluetoothData == "*led on") 
     {
       digitalWrite(led1, 1);
     }
-    if (BluetoothData == "*p***") 
+    if (BluetoothData == "*led off") 
     { 
       digitalWrite(led1, 0);      
     }
