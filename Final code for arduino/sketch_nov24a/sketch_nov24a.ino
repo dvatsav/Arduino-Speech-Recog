@@ -17,15 +17,17 @@ int led2=6; //led at pin 13
 int led3=7; //led at pin 13
 
 SoftwareSerial Genotronex(10, 11);
-float firstnumber,secondnumber,sum,product,difference;
-String BluetoothData, inputstring,finalstring;
+float firstnumber,secondnumber,sum,product,difference,division;
+String BluetoothData, inputstring,finalstring, addstring,subtractstring;
+
+
 
 
 float beforeop(String input)
 {
     float beginoutputinteger=0;
     String beginoutput;
-    float i,point;
+    int i,point;
     for (i=0;input[i]!='\0';i++)
     {
         if(input[i]=='+' || input[i]=='-' || input[i]=='x' || input[i]=='X' )
@@ -42,6 +44,9 @@ float beforeop(String input)
     beginoutputinteger=beginoutput.toFloat();
     return beginoutputinteger;
 }
+
+
+
 
 float afterop(String input)
 {
@@ -65,6 +70,63 @@ float afterop(String input)
     return endoutputinteger;
 }
 
+
+
+float aftermiddleterm(String input)
+{
+  int pointfirstspace,pointsecondspace;
+  float endoutputinteger=0;
+  String endoutput;
+  for (int i=0;input[i]!='\0';i++)
+  {
+    if(input[i]==' ')
+    {
+      pointfirstspace=i;
+    }
+  }
+  for (int i=pointfirstspace+1;input[i]!='\0';i++)
+  {
+    if(input[i]==' ')
+    {
+      pointsecondspace=i;
+    }
+  }
+  for (int i=pointsecondspace+1;input[i]!='\0';i++)
+  {
+    endoutput+=input[i];
+  }
+  endoutputinteger=endoutput.toFloat();
+  return endoutputinteger;
+}
+
+float beforemiddleterm(String input)
+{
+  int pointfirstspace,pointsecondspace;
+  float beginoutputinteger=0;
+  String beginoutput;
+  for (int i=0;input[i]!='\0';i++)
+  {
+    if(input[i]==' ')
+    {
+      pointfirstspace=i;
+    }
+  }
+  for (int i=pointfirstspace+1;input[i]!='\0';i++)
+  {
+    if(input[i]==' ')
+    {
+      pointsecondspace=i;
+    }
+  }
+  for (int i=0;i<pointfirstspace;i++)
+  {
+    beginoutput+=input[i];
+  }
+  beginoutputinteger=beginoutput.toFloat();
+  return beginoutputinteger;
+}
+
+
 void setup() {
   
   Genotronex.begin(38400);
@@ -74,6 +136,9 @@ void setup() {
   lcd.begin(16, 2);
   Serial.begin(9600);
 }
+
+
+
 
 void loop() 
 {
@@ -86,7 +151,7 @@ void loop()
     BluetoothData+=c;
   } 
   inputstring="";
-  for ( float i=1; BluetoothData[i]!='\0';i++)
+  for ( int i=1; BluetoothData[i]!='\0';i++)
   {
     inputstring+=BluetoothData[i];
   }
@@ -127,14 +192,14 @@ void loop()
     digitalWrite(led2,LOW);
     digitalWrite(led3,LOW);
   }
-  else if(inputstring=="calculate distance")
+  else if(inputstring=="calculate distance" || inputstring=="tell me the distance")
   {
     unsigned int uS = sonar.ping();
     lcd.print(uS / US_ROUNDTRIP_CM);
     lcd.print(" cm");
   }
   finalstring="";
-  for (float i=0;i<inputstring[i]!='\0';i++)
+  for (int i=0;i<inputstring[i]!='\0';i++)
   {
     if (inputstring[i]!=' ')
     {
@@ -146,10 +211,11 @@ void loop()
   sum=0;
   product=0;
   difference=0;
-  for (float i=0;finalstring[i]!='\0';i++)
+  division=0;
+  for (int i=0;finalstring[i]!='\0';i++)
   {
     if(finalstring[i]=='+')
-    {
+    { 
       firstnumber=beforeop(finalstring);      
       secondnumber=afterop(finalstring);
       sum=firstnumber+secondnumber;
@@ -175,6 +241,59 @@ void loop()
       lcd.print(" = ");
       lcd.print(difference);
     }
+  }
+  addstring="";
+  if(inputstring[0]=='a' && inputstring[1]=='d' && inputstring[2]=='d')
+  {
+    for (int i=4;inputstring[i]!='\0';i++)
+    {
+      addstring+=inputstring[i];
+    }
+    firstnumber=beforemiddleterm(addstring);
+    secondnumber=aftermiddleterm(addstring);
+    sum=firstnumber+secondnumber;
+    lcd.print(inputstring);
+    lcd.print(" ==> ");
+    lcd.print(sum);
+  }
+  else if(inputstring[0]=='s' && inputstring[1]=='u' && inputstring[2]=='b' && inputstring[3]=='t' && inputstring[4]=='r' && inputstring[5]=='a' && inputstring[6]=='c' && inputstring[7]=='t')
+  {
+    for (int i=9;inputstring[i]!='\0';i++)
+    {
+      addstring+=inputstring[i];
+    }
+    firstnumber=beforemiddleterm(addstring);
+    secondnumber=aftermiddleterm(addstring);
+    difference=secondnumber-firstnumber;
+    lcd.print(inputstring);
+    lcd.print(" ==> ");
+    lcd.print(difference);
+  }
+  else if(inputstring[0]=='m' && inputstring[1]=='u' && inputstring[2]=='l' && inputstring[3]=='t' && inputstring[4]=='i' && inputstring[5]=='p' && inputstring[6]=='l' && inputstring[7]=='y')
+  {
+    for (int i=9;inputstring[i]!='\0';i++)
+    {
+      addstring+=inputstring[i];
+    }
+    firstnumber=beforemiddleterm(addstring);
+    secondnumber=aftermiddleterm(addstring);
+    product=secondnumber*firstnumber;
+    lcd.print(inputstring);
+    lcd.print(" ==> ");
+    lcd.print(product);
+  }
+  else if(inputstring[0]=='d' && inputstring[1]=='i' && inputstring[2]=='v' && inputstring[3]=='i' && inputstring[4]=='d' && inputstring[5]=='e')
+  {
+    for (int i=7;inputstring[i]!='\0';i++)
+    {
+      addstring+=inputstring[i];
+    }
+    firstnumber=beforemiddleterm(addstring);
+    secondnumber=aftermiddleterm(addstring);
+    division=firstnumber/secondnumber;
+    lcd.print(inputstring);
+    lcd.print(" ==> ");
+    lcd.print(division);
   }
   lcd.setCursor(0,0);
   delay(2000);
