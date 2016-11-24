@@ -5,10 +5,12 @@
 #include "rgb_lcd.h"
 
 rgb_lcd lcd;
-led1=13; //led at pin 13
+int led1=13; //led at pin 13
+int led2=8; //led at pin 13
+int led3=7; //led at pin 13
 
 SoftwareSerial Genotronex(10, 11);
-float led1 = 13, firstnumber,secondnumber,sum,product,difference;
+float firstnumber,secondnumber,sum,product,difference;
 String BluetoothData, inputstring,finalstring;
 
 
@@ -60,6 +62,8 @@ void setup() {
   
   Genotronex.begin(38400);
   pinMode(led1, OUTPUT);
+  pinMode(led2, OUTPUT);
+  pinMode(led3, OUTPUT);
   lcd.begin(16, 2);
   Serial.begin(9600);
 }
@@ -80,17 +84,43 @@ void loop()
     inputstring+=BluetoothData[i];
   }
   //led off led on shit
-  if(inputsring=="led 1 on")
+  if(inputstring=="led 1 on" || inputstring=="LED 1 on")
   {
     digitalWrite(led1,HIGH);
   }
-  else if (inputstring=="led 1 off")
+  else if (inputstring=="led 1 off" || inputstring=="LED 1 off" || inputstring=="LED 1 of")
   {
     digitalWrite(led1,LOW);
   }
+    if(inputstring=="led 2 on" || inputstring=="LED 2 on")
+  {
+    digitalWrite(led2,HIGH);
+  }
+  else if (inputstring=="led 2 off" || inputstring=="LED 2 off" || inputstring=="LED 2 of")
+  {
+    digitalWrite(led2,LOW);
+  }
+    if(inputstring=="led 3 on" || inputstring=="LED 3 on")
+  {
+    digitalWrite(led3,HIGH);
+  }
+  else if (inputstring=="led 3 off" || inputstring=="LED 3 off" || inputstring=="LED 3 of")
+  {
+    digitalWrite(led3,LOW);
+  }
+  if(inputstring=="all on")
+  {
+    digitalWrite(led1,HIGH);
+    digitalWrite(led2,HIGH);
+    digitalWrite(led3,HIGH);
+  }
+  else if (inputstring=="all off" || inputstring=="all of")
+  {
+    digitalWrite(led1,LOW);
+    digitalWrite(led2,LOW);
+    digitalWrite(led3,LOW);
+  }
   finalstring="";
-
-  
   for (float i=0;i<inputstring[i]!='\0';i++)
   {
     if (inputstring[i]!=' ')
