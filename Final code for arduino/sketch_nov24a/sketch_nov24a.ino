@@ -5,11 +5,10 @@
 #include "rgb_lcd.h"
 #include <NewPing.h>
 
-#define TRIGGER_PIN  8 
-#define ECHO_PIN     9
-#define MAX_DISTANCE 2000
-
-NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
+#define maximum 2000
+#define trigger  8 
+#define echo     9
+NewPing sonar(trigger, echo, maximum);
 
 rgb_lcd lcd;
 int led1=13; //led at pin 13
@@ -17,8 +16,9 @@ int led2=6; //led at pin 13
 int led3=7; //led at pin 13
 
 SoftwareSerial Genotronex(10, 11);
-float firstnumber,secondnumber,sum,product,difference,division;
-String BluetoothData, inputstring,finalstring, addstring,subtractstring;
+int positionoftext,flagraisedto;
+float firstnumber,secondnumber,sum,product,difference,division,exponent;
+String BluetoothData, inputstring,finalstring, addstring,firstnumberstring_raisedto,secondnumberstring_raisedto;
 
 
 
@@ -195,8 +195,9 @@ void loop()
   else if(inputstring=="calculate distance" || inputstring=="tell me the distance")
   {
     unsigned int uS = sonar.ping();
+    lcd.print("Distance to object is: ");
     lcd.print(uS / US_ROUNDTRIP_CM);
-    lcd.print(" cm");
+    lcd.print("cm");
   }
   finalstring="";
   for (int i=0;i<inputstring[i]!='\0';i++)
@@ -294,6 +295,35 @@ void loop()
     lcd.print(inputstring);
     lcd.print(" ==> ");
     lcd.print(division);
+  }
+  flagraisedto=0;
+  positionoftext=0;
+  for (i=0;inputstring[i]!='\0';i++)
+  {
+    if(inputstring[i]=='r' && inputstring[i+1]='a' && inputstring[i+2]='i' && inputstring[i+3]='s' && inputstring[i+4]='e' && inputstring[i+5]='d' && inputstring[i+6]=' ' && inputstring[i+7]='t' && inputstring[i+8]='o')
+    {
+      positionoftext=i;
+      flagraisedto=1;
+    }
+  }
+  if(flagraisedto==1)
+  {
+    firstnumberstring_raisedto="";
+    secondnumberstring_raisedto="";
+    for (i=0;i<positionoftext;i++)
+    {
+      firstnumberstring_raisedto+=inputstring[i];
+    }
+    for (i=positionoftext+10;inputstring[i]!='\0';i++)
+    {
+      secondnumberstring_raisedto+=inputstring[i];
+    }
+    firstnumber=firstnumberstring_raisedto.toFloat();
+    secondnumber=secondnumberstring_raisedto.toFloat();
+    exponent=pow(firstnumber,secondnumber);
+    lcd.print(inputstring);
+    lcd.print(" ==> ");
+    lcd.print(exponent);    
   }
   lcd.setCursor(0,0);
   delay(2000);
