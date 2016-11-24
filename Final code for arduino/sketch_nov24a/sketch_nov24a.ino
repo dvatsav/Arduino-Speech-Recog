@@ -5,17 +5,18 @@
 #include "rgb_lcd.h"
 
 rgb_lcd lcd;
+led1=13; //led at pin 13
 
 SoftwareSerial Genotronex(10, 11);
-int led1 = 13, firstnumber,secondnumber,sum,product,difference;
+float led1 = 13, firstnumber,secondnumber,sum,product,difference;
 String BluetoothData, inputstring,finalstring;
 
 
-int beforeop(String input)
+float beforeop(String input)
 {
-    int beginoutputinteger=0;
+    float beginoutputinteger=0;
     String beginoutput;
-    int i,point;
+    float i,point;
     for (i=0;input[i]!='\0';i++)
     {
         if(input[i]=='+' || input[i]=='-' || input[i]=='x')
@@ -29,15 +30,15 @@ int beforeop(String input)
         beginoutput+=input[i];
     }
 
-    beginoutputinteger=beginoutput.toInt();
+    beginoutputinteger=beginoutput.toFloat();
     return beginoutputinteger;
 }
 
-int afterop(String input)
+float afterop(String input)
 {
-    int endoutputinteger;
+    float endoutputinteger;
     String endoutput;
-    int i,k,point;
+    float i,k,point;
 
     for(i=0;input[i]!='\0';i++)
     {
@@ -51,7 +52,7 @@ int afterop(String input)
     {
         endoutput+=input[i];
     }
-    endoutputinteger=endoutput.toInt();
+    endoutputinteger=endoutput.toFloat();
     return endoutputinteger;
 }
 
@@ -74,12 +75,23 @@ void loop()
     BluetoothData+=c;
   } 
   inputstring="";
-  for ( int i=1; BluetoothData[i]!='\0';i++)
+  for ( float i=1; BluetoothData[i]!='\0';i++)
   {
     inputstring+=BluetoothData[i];
   }
+  //led off led on shit
+  if(inputsring=="led 1 on")
+  {
+    digitalWrite(led1,HIGH);
+  }
+  else if (inputstring=="led 1 off")
+  {
+    digitalWrite(led1,LOW);
+  }
   finalstring="";
-  for (int i=0;i<inputstring[i]!='\0';i++)
+
+  
+  for (float i=0;i<inputstring[i]!='\0';i++)
   {
     if (inputstring[i]!=' ')
     {
@@ -91,20 +103,24 @@ void loop()
   sum=0;
   product=0;
   difference=0;
-  for (int i=0;finalstring[i]!='\0';i++)
+  for (float i=0;finalstring[i]!='\0';i++)
   {
     if(finalstring[i]=='+')
     {
       firstnumber=beforeop(finalstring);      
       secondnumber=afterop(finalstring);
       sum=firstnumber+secondnumber;
+      lcd.print(inputstring);
+      lcd.print(" = ");
       lcd.print(sum);
     }
-    else if(finalstring[i]=='x')
+    else if(finalstring[i]=='x' || finalstring[i]=='X')
     {
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);
       product=firstnumber*secondnumber;
+      lcd.print(inputstring);
+      lcd.print(" = ");
       lcd.print(product);             
     }
     else if(finalstring[i]=='-')
@@ -112,11 +128,13 @@ void loop()
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);            
       difference=firstnumber-secondnumber;
+      lcd.print(inputstring);
+      lcd.print(" = ");
       lcd.print(difference);
     }
   }
   lcd.setCursor(0,0);
-  delay(5000);
+  delay(2000);
   BluetoothData="";
 }
 
