@@ -1,3 +1,4 @@
+
 #include <SoftwareSerial.h>
 #include<math.h>
 #include <Wire.h>
@@ -82,6 +83,7 @@ float aftermiddleterm(String input)
     if(input[i]==' ')
     {
       pointfirstspace=i;
+      break;
     }
   }
   for (int i=pointfirstspace+1;input[i]!='\0';i++)
@@ -89,6 +91,7 @@ float aftermiddleterm(String input)
     if(input[i]==' ')
     {
       pointsecondspace=i;
+      break;
     }
   }
   for (int i=pointsecondspace+1;input[i]!='\0';i++)
@@ -109,6 +112,7 @@ float beforemiddleterm(String input)
     if(input[i]==' ')
     {
       pointfirstspace=i;
+      break;
     }
   }
   for (int i=pointfirstspace+1;input[i]!='\0';i++)
@@ -116,6 +120,7 @@ float beforemiddleterm(String input)
     if(input[i]==' ')
     {
       pointsecondspace=i;
+      break;
     }
   }
   for (int i=0;i<pointfirstspace;i++)
@@ -142,7 +147,6 @@ void setup() {
 
 void loop() 
 {
-  lcd.clear();
   lcd.setRGB(255, 255, 255);
   while (Genotronex.available())
   {
@@ -195,6 +199,7 @@ void loop()
   else if(inputstring=="calculate distance" || inputstring=="tell me the distance")
   {
     unsigned int uS = sonar.ping();
+    lcd.clear();
     lcd.print("Distance to object is: ");
     lcd.print(uS / US_ROUNDTRIP_CM);
     lcd.print("cm");
@@ -220,6 +225,7 @@ void loop()
       firstnumber=beforeop(finalstring);      
       secondnumber=afterop(finalstring);
       sum=firstnumber+secondnumber;
+      lcd.clear();
       lcd.print(finalstring);
       lcd.print(" = ");
       lcd.print(sum);
@@ -229,6 +235,7 @@ void loop()
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);
       product=firstnumber*secondnumber;
+      lcd.clear();
       lcd.print(finalstring);
       lcd.print(" = ");
       lcd.print(product);             
@@ -236,7 +243,8 @@ void loop()
     else if(finalstring[i]=='-')
     {
       firstnumber=beforeop(finalstring);
-      secondnumber=afterop(finalstring);            
+      secondnumber=afterop(finalstring);   
+      lcd.clear();         
       difference=firstnumber-secondnumber;
       lcd.print(finalstring);
       lcd.print(" = ");
@@ -250,11 +258,10 @@ void loop()
     {
       addstring+=inputstring[i];
     }
+    lcd.clear();
     firstnumber=beforemiddleterm(addstring);
     secondnumber=aftermiddleterm(addstring);
     sum=firstnumber+secondnumber;
-    lcd.print(inputstring);
-    lcd.print(" ==> ");
     lcd.print(sum);
   }
   else if(inputstring[0]=='s' && inputstring[1]=='u' && inputstring[2]=='b' && inputstring[3]=='t' && inputstring[4]=='r' && inputstring[5]=='a' && inputstring[6]=='c' && inputstring[7]=='t')
@@ -264,10 +271,9 @@ void loop()
       addstring+=inputstring[i];
     }
     firstnumber=beforemiddleterm(addstring);
+    lcd.clear();
     secondnumber=aftermiddleterm(addstring);
     difference=secondnumber-firstnumber;
-    lcd.print(inputstring);
-    lcd.print(" ==> ");
     lcd.print(difference);
   }
   else if(inputstring[0]=='m' && inputstring[1]=='u' && inputstring[2]=='l' && inputstring[3]=='t' && inputstring[4]=='i' && inputstring[5]=='p' && inputstring[6]=='l' && inputstring[7]=='y')
@@ -279,8 +285,7 @@ void loop()
     firstnumber=beforemiddleterm(addstring);
     secondnumber=aftermiddleterm(addstring);
     product=secondnumber*firstnumber;
-    lcd.print(inputstring);
-    lcd.print(" ==> ");
+    lcd.clear();
     lcd.print(product);
   }
   else if(inputstring[0]=='d' && inputstring[1]=='i' && inputstring[2]=='v' && inputstring[3]=='i' && inputstring[4]=='d' && inputstring[5]=='e')
@@ -292,15 +297,14 @@ void loop()
     firstnumber=beforemiddleterm(addstring);
     secondnumber=aftermiddleterm(addstring);
     division=firstnumber/secondnumber;
-    lcd.print(inputstring);
-    lcd.print(" ==> ");
+    lcd.clear();
     lcd.print(division);
   }
   flagraisedto=0;
   positionoftext=0;
-  for (i=0;inputstring[i]!='\0';i++)
+  for (int i=0;inputstring[i]!='\0';i++)
   {
-    if(inputstring[i]=='r' && inputstring[i+1]='a' && inputstring[i+2]='i' && inputstring[i+3]='s' && inputstring[i+4]='e' && inputstring[i+5]='d' && inputstring[i+6]=' ' && inputstring[i+7]='t' && inputstring[i+8]='o')
+    if(inputstring[i]=='r' && inputstring[i+1]=='a' && inputstring[i+2]=='i' && inputstring[i+3]=='s' && inputstring[i+4]=='e' && inputstring[i+5]=='d' && inputstring[i+6]==' ' && inputstring[i+7]=='t' && inputstring[i+8]=='o')
     {
       positionoftext=i;
       flagraisedto=1;
@@ -310,19 +314,18 @@ void loop()
   {
     firstnumberstring_raisedto="";
     secondnumberstring_raisedto="";
-    for (i=0;i<positionoftext;i++)
+    for (int i=0;i<positionoftext;i++)
     {
       firstnumberstring_raisedto+=inputstring[i];
     }
-    for (i=positionoftext+10;inputstring[i]!='\0';i++)
+    for (int i=positionoftext+10;inputstring[i]!='\0';i++)
     {
       secondnumberstring_raisedto+=inputstring[i];
     }
     firstnumber=firstnumberstring_raisedto.toFloat();
     secondnumber=secondnumberstring_raisedto.toFloat();
     exponent=pow(firstnumber,secondnumber);
-    lcd.print(inputstring);
-    lcd.print(" ==> ");
+    lcd.clear();
     lcd.print(exponent);    
   }
   lcd.setCursor(0,0);
