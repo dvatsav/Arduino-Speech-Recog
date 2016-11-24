@@ -3,10 +3,17 @@
 #include <Wire.h>
 #include<stdio.h>
 #include "rgb_lcd.h"
+#include <NewPing.h>
+
+#define TRIGGER_PIN  8 
+#define ECHO_PIN     9
+#define MAX_DISTANCE 2000
+
+NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
 rgb_lcd lcd;
 int led1=13; //led at pin 13
-int led2=8; //led at pin 13
+int led2=6; //led at pin 13
 int led3=7; //led at pin 13
 
 SoftwareSerial Genotronex(10, 11);
@@ -100,7 +107,7 @@ void loop()
   {
     digitalWrite(led2,LOW);
   }
-    if(inputstring=="led 3 on" || inputstring=="LED 3 on")
+  else if(inputstring=="led 3 on" || inputstring=="LED 3 on")
   {
     digitalWrite(led3,HIGH);
   }
@@ -108,7 +115,7 @@ void loop()
   {
     digitalWrite(led3,LOW);
   }
-  if(inputstring=="all on")
+  else if(inputstring=="all on")
   {
     digitalWrite(led1,HIGH);
     digitalWrite(led2,HIGH);
@@ -119,6 +126,12 @@ void loop()
     digitalWrite(led1,LOW);
     digitalWrite(led2,LOW);
     digitalWrite(led3,LOW);
+  }
+  else if(inputstring=="calculate distance")
+  {
+    unsigned int uS = sonar.ping();
+    lcd.print(uS / US_ROUNDTRIP_CM);
+    lcd.print(" cm");
   }
   finalstring="";
   for (float i=0;i<inputstring[i]!='\0';i++)
