@@ -28,7 +28,7 @@ float beforeop(String input)
     float i,point;
     for (i=0;input[i]!='\0';i++)
     {
-        if(input[i]=='+' || input[i]=='-' || input[i]=='x')
+        if(input[i]=='+' || input[i]=='-' || input[i]=='x' || input[i]=='X' )
         {
             point=i;
             break;
@@ -51,7 +51,7 @@ float afterop(String input)
 
     for(i=0;input[i]!='\0';i++)
     {
-        if(input[i]=='+'|| input[i]=='x' || input[i]=='-')
+        if(input[i]=='+'|| input[i]=='x' || input[i]=='-' || input[i]=='X')
         {
             point=i;
             break;
@@ -153,7 +153,7 @@ void loop()
       firstnumber=beforeop(finalstring);      
       secondnumber=afterop(finalstring);
       sum=firstnumber+secondnumber;
-      lcd.print(inputstring);
+      lcd.print(finalstring);
       lcd.print(" = ");
       lcd.print(sum);
     }
@@ -162,7 +162,7 @@ void loop()
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);
       product=firstnumber*secondnumber;
-      lcd.print(inputstring);
+      lcd.print(finalstring);
       lcd.print(" = ");
       lcd.print(product);             
     }
@@ -171,7 +171,7 @@ void loop()
       firstnumber=beforeop(finalstring);
       secondnumber=afterop(finalstring);            
       difference=firstnumber-secondnumber;
-      lcd.print(inputstring);
+      lcd.print(finalstring);
       lcd.print(" = ");
       lcd.print(difference);
     }
