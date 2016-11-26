@@ -1,4 +1,3 @@
-
 #include <SoftwareSerial.h>
 #include<math.h>
 #include <Wire.h>
@@ -12,13 +11,15 @@
 NewPing sonar(trigger, echo, maximum);
 
 rgb_lcd lcd;
+int tempPin = 0;
+int buzzerPin=8;
 int led1=13; //led at pin 13
 int led2=6; //led at pin 13
 int led3=7; //led at pin 13
 
 SoftwareSerial Genotronex(10, 11);
 int positionoftext,flagraisedto;
-float firstnumber,secondnumber,sum,product,difference,division,exponent;
+float firstnumber,secondnumber,sum,product,difference,division,exponent,temp;
 String BluetoothData, inputstring,finalstring, addstring,firstnumberstring_raisedto,secondnumberstring_raisedto;
 
 
@@ -31,7 +32,7 @@ float beforeop(String input)
     int i,point;
     for (i=0;input[i]!='\0';i++)
     {
-        if(input[i]=='+' || input[i]=='-' || input[i]=='x' || input[i]=='X' )
+        if(input[i]=='+' || input[i]=='-' || input[i]=='x' || input[i]=='X')
         {
             point=i;
             break;
@@ -138,6 +139,7 @@ void setup() {
   pinMode(led1, OUTPUT);
   pinMode(led2, OUTPUT);
   pinMode(led3, OUTPUT);
+  pinMode(buzzerPin, OUTPUT);
   lcd.begin(16, 2);
   Serial.begin(9600);
 }
@@ -160,27 +162,27 @@ void loop()
     inputstring+=BluetoothData[i];
   }
   //led off led on shit
-  if(inputstring=="led 1 on" || inputstring=="LED 1 on")
+  if(inputstring=="led 1 on" || inputstring=="LED 1 on" || inputstring=="LED one on" || inputstring=="LED one on")
   {
     digitalWrite(led1,HIGH);
   }
-  else if (inputstring=="led 1 off" || inputstring=="LED 1 off" || inputstring=="LED 1 of")
+  else if (inputstring=="led 1 off" || inputstring=="LED 1 off" || inputstring=="LED 1 of" || inputstring=="LED one off" || inputstring=="LED one of" || inputstring=="led one on")
   {
     digitalWrite(led1,LOW);
   }
-    if(inputstring=="led 2 on" || inputstring=="LED 2 on")
+    if(inputstring=="led 2 on" || inputstring=="LED 2 on" || inputstring=="LED two on" || inputstring=="led two on")
   {
     digitalWrite(led2,HIGH);
   }
-  else if (inputstring=="led 2 off" || inputstring=="LED 2 off" || inputstring=="LED 2 of")
+  else if (inputstring=="led 2 off" || inputstring=="LED 2 off" || inputstring=="LED 2 of" || inputstring=="LED two on" || inputstring=="led two on")
   {
     digitalWrite(led2,LOW);
   }
-  else if(inputstring=="led 3 on" || inputstring=="LED 3 on")
+  else if(inputstring=="led 3 on" || inputstring=="LED 3 on" || inputstring=="LED three on"|| inputstring=="led three of")
   {
     digitalWrite(led3,HIGH);
   }
-  else if (inputstring=="led 3 off" || inputstring=="LED 3 off" || inputstring=="LED 3 of")
+  else if (inputstring=="led 3 off" || inputstring=="LED 3 off" || inputstring=="LED 3 of" || inputstring=="LED three of" || inputstring=="LED three off")
   {
     digitalWrite(led3,LOW);
   }
@@ -200,9 +202,26 @@ void loop()
   {
     unsigned int uS = sonar.ping();
     lcd.clear();
-    lcd.print("Distance to object is: ");
     lcd.print(uS / US_ROUNDTRIP_CM);
     lcd.print("cm");
+    float dist=uS/US_ROUNDTRIP_CM;
+    if(dist<20 && dist>=1)
+    {
+      digitalWrite(buzzerPin, HIGH);
+      delay(2500);
+      digitalWrite(buzzerPin, LOW);
+    }
+  }
+  else if(inputstring=="tell me the temperature" || inputstring=="what's the temperature" || inputstring=="calculate temperature" || inputstring=="temperature")
+  {
+    temp = analogRead(tempPin);
+    temp = (float)(1023 - temp)*10000/temp;
+    temp = 1/(log(temp/10000)/3975+1/298.15)-273.15;
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print(temp,2);
+    lcd.print((char)223);
+    lcd.print("C");
   }
   finalstring="";
   for (int i=0;i<inputstring[i]!='\0';i++)
