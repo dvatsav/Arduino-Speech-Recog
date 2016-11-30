@@ -161,7 +161,7 @@ void loop()
   {
     inputstring+=BluetoothData[i];
   }
-  //led off led on shit
+  //led off led on
   if(inputstring=="led 1 on" || inputstring=="LED 1 on" || inputstring=="LED one on" || inputstring=="LED one on")
   {
     digitalWrite(led1,HIGH);
