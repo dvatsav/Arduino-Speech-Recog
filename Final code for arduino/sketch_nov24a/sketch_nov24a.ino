@@ -162,11 +162,11 @@ void loop()
     inputstring+=BluetoothData[i];
   }
   //led off led on
-  if(inputstring=="led 1 on" || inputstring=="LED 1 on" || inputstring=="LED one on" || inputstring=="LED one on")
+  if(inputstring=="led 1 on" || inputstring=="LED 1 on" || inputstring=="LED one on" || inputstring=="LED one on" || inputstring=="led one on")
   {
     digitalWrite(led1,HIGH);
   }
-  else if (inputstring=="led 1 off" || inputstring=="LED 1 off" || inputstring=="LED 1 of" || inputstring=="LED one off" || inputstring=="LED one of" || inputstring=="led one on")
+  else if (inputstring=="led 1 off" || inputstring=="LED 1 off" || inputstring=="LED 1 of" || inputstring=="LED one off" || inputstring=="LED one of")
   {
     digitalWrite(led1,LOW);
   }
@@ -174,11 +174,11 @@ void loop()
   {
     digitalWrite(led2,HIGH);
   }
-  else if (inputstring=="led 2 off" || inputstring=="LED 2 off" || inputstring=="LED 2 of" || inputstring=="LED two on" || inputstring=="led two on")
+  else if (inputstring=="led 2 off" || inputstring=="LED 2 off" || inputstring=="LED 2 of" ||  inputstring=="led two off")
   {
     digitalWrite(led2,LOW);
   }
-  else if(inputstring=="led 3 on" || inputstring=="LED 3 on" || inputstring=="LED three on"|| inputstring=="led three of")
+  else if(inputstring=="led 3 on" || inputstring=="LED 3 on" || inputstring=="LED three on"|| inputstring=="led three on")
   {
     digitalWrite(led3,HIGH);
   }
